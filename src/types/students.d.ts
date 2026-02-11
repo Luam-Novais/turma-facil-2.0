@@ -13,7 +13,7 @@ interface SubscriptionBasicData {
   subscription_type: SubscriptionType;
   start_date: string | Date;
   end_date?: string | Date;
-} 
+}
 export interface StudentWithSubscription {
   id: number;
   name: string;
@@ -21,7 +21,7 @@ export interface StudentWithSubscription {
   cpf: string;
   date_birth: string | Date;
   observations?: string;
-  subscription: SubscriptionBasicData
+  subscription: SubscriptionBasicData;
 }
 export interface CreateStudentDTO {
   name: string;
@@ -31,7 +31,7 @@ export interface CreateStudentDTO {
   observations?: string;
   subscription_type: SubscriptionType;
 }
-type SubscriptionType = 'EXPERIMENTAL' | 'MENSAL_1X' | "MENSAL_2X";
+type SubscriptionType = 'EXPERIMENTAL' | 'MENSAL_1X' | 'MENSAL_2X';
 
 export interface UpdateStudentDTO {
   id: number;

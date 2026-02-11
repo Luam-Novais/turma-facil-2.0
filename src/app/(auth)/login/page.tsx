@@ -2,6 +2,7 @@
 import { Button } from "@/src/components/button";
 import { Input, InputPassword } from "@/src/components/input";
 import { loginService } from "@/src/service/loginService";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -12,16 +13,21 @@ interface AuthCredentialsDTO{
 export default function Login(){
   const {handleSubmit, register} = useForm<AuthCredentialsDTO>()
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState();
+  const [error, setError] = useState<string | null>(null);
+  const redirect = useRouter()
   const onSubmit: SubmitHandler<AuthCredentialsDTO> = async (data)=>{
     try {
       setLoading(true)
       const { res, json } = await loginService(data);
       if(res.ok){
-        alert(json.message)
+        setError(null)
+        redirect.push('/')        
       }
-    } catch (error) {
-      
+      else{
+        setError(json.messageError)
+      }
+    } catch (error:any) {
+      setError(error.messageError)
     }finally{
       setLoading(false)
     }
