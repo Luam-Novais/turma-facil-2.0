@@ -1,21 +1,21 @@
 import { StudentWithSubscription } from '../types/students';
 import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { formatDate } from '../utils/formatDate';
 
-export function ListStudents({ students }: { students: StudentWithSubscription[] }) {
-  
-  return (
-    <ul className='flex flex-col gap-2 min-h-screen'>
-      {students.map((student)=>{
-        return (
-          <CardItem student={student} />
-        )
-      })}
-    </ul>
-  );
-}
-
-export function CardItem({ student }: { student: StudentWithSubscription }) {
+export  function ListStudents({ students }: { students: StudentWithSubscription[] }) {
+    return (
+      <div className='flex flex-col gap-4'>
+        <h1>Total: {students.length}</h1>
+        <ul>
+          {students.map((student) => {
+            return <CardStudent key={student.id} student={student} />;
+          })}
+        </ul>
+      </div>
+    );
+  }
+export function CardStudent({ student }: { student: StudentWithSubscription }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   function handleDropState() {
     setIsOpen((prev) => !prev);
@@ -31,7 +31,7 @@ export function CardItem({ student }: { student: StudentWithSubscription }) {
         <span className={`${isOpen ? 'block' : 'hidden'} flex flex-col gap-3 text-sm min-w-full`}>
           <InfoCard title="Telefone: " desc={student.phone} />
           <InfoCard title="Vínculo: " desc={student.subscription.subscription_type} />
-          <InfoCard title="Data de inicio: " desc={student.subscription.start_date as string} />
+          <InfoCard title="Data de inicio: " desc={formatDate(new Date(student.subscription.start_date as Date))} />
           {!student.subscription.isActive && <InfoCard title="Data de encerramento" desc={student.subscription.end_date as string} />}
           {student.observations && (
             <span>
@@ -50,7 +50,7 @@ type InfoCardProps = {
   className?: string;
 };
 function InfoCard({ title, desc }: InfoCardProps) {
-if(desc){
+  if (desc) {
     const formatFirst = desc.slice(0, 1).toUpperCase();
     const concatString = formatFirst.concat(desc.slice(1));
     return (
@@ -59,5 +59,5 @@ if(desc){
         <p className="font-normal">{concatString}</p>
       </span>
     );
-}
+  }
 }

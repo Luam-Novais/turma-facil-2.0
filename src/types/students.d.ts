@@ -31,7 +31,6 @@ export interface CreateStudentDTO {
   observations?: string;
   subscription_type: SubscriptionType;
 }
-type SubscriptionType = 'EXPERIMENTAL' | 'MENSAL_1X' | 'MENSAL_2X';
 
 export interface UpdateStudentDTO {
   id: number;

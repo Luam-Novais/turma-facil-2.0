@@ -1,5 +1,9 @@
 export  function SpinnerWithButton() {
-  return <div className="w-3 h-3 border-2 border-t-violet-400 border-violet-200 rounded-full animate-spin"></div>;
+  return (
+    <div className="p-4">
+      <div className="w-3 h-3 border-2 border-t-violet-400 border-violet-200 rounded-full animate-spin "></div>;
+    </div>
+  );
 }
 
 export function Spinner() {
