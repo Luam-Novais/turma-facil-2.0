@@ -16,32 +16,32 @@ export default function Page() {
 
 const studentPagesInfo: CardProps[] = [
   {
+    href: '/student/get',
+    icon: List,
+    title: 'Ver alunos',
+    desc: 'Veja todos os seus alunos com filtros.',
+  },
+  {
     href: '/student/create',
     icon: Plus,
     title: 'Criar',
-    desc: 'Criar seu aluno.'
+    desc: 'Criar seu aluno.',
   },
   {
     href: '/student/update',
     icon: Pencil,
     title: 'Editar',
-    desc: 'Edite a informações dos seu aluno.'
+    desc: 'Edite a informações dos seu aluno.',
   },
   {
     href: '/student/delete',
     icon: Trash,
     title: 'Deletar',
-    desc: 'Exclua um aluno.'
+    desc: 'Exclua um aluno.',
   },
-  {
-    href: '/student/get',
-    icon: List,
-    title: 'Ver alunos',
-    desc: 'Veja todos os seus alunos com filtros.'
-  },
-//   {
-//     href: '/student/',
-//     icon: Plus,
-//     title: '',
-//   },
+  //   {
+  //     href: '/student/',
+  //     icon: Plus,
+  //     title: '',
+  //   },
 ];
