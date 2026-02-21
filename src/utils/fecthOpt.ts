@@ -45,6 +45,7 @@ export function data_del(url: string) {
   return {
     url: process.env.NEXT_PUBLIC_API_URL + url,
     options: {
+      method: 'DELETE',
       credentials: 'include',
     },
   };

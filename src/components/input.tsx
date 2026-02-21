@@ -9,9 +9,9 @@ interface SearchInputProps{
 }
 export function SearchInput({placeholder, type, register}: SearchInputProps){
     return (
-      <span className="flex shadow-xl ">
-        <input type={type} {...register} placeholder={placeholder} className="w-full bg-gray-200 h-8 border-l-2 border-b-2 border-t-2 border-gray-300 rounded-l-xl py-5 px-2" />
-        <button type='submit' className="bg-violet-600 border-2 border-violet-700 px-6 rounded-r-xl">
+      <span className="flex shadow-xl min-w-full w-full ">
+        <input type={type} {...register} placeholder={placeholder} className="w-full bg-gray-100 h-8 border-l border-b border-t border-gray-400 rounded-l-md py-5 px-2" />
+        <button type="submit" className="bg-violet-600 border border-violet-700 px-6 rounded-r-md">
           <Search color="white" size={18} />
         </button>
       </span>
@@ -34,7 +34,7 @@ export function Input({ label, type, placeholder, register }: Input) {
       <label className="block" htmlFor="input">
         {label}
       </label>
-      <input type={type} id="input" {...register}  className="border border-gray-400 rounded-sm text-sm w-full shadow bg-gray-100 p-2" placeholder={placeholder} />
+      <input type={type} id="input" {...register}  className="border border-gray-400 rounded-md text-sm w-full shadow bg-gray-100 p-2" placeholder={placeholder} />
     </span>
   );
 }

@@ -1,10 +1,11 @@
-import { Card, CardProps } from "@/src/components/card";
-import {Plus, Trash, Pencil, List} from 'lucide-react'
+'use client';
+import { Card, CardProps } from '@/src/components/card';
+import { Plus, Trash, Pencil, List } from 'lucide-react';
 
 export default function Page() {
   return (
     <section className="flex flex-col gap-4 px-2 py-8 bg-gray-100 min-h-300">
-        <h1>Central de Alunos</h1>
+      <h1>Central de Alunos</h1>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 md:p-8">
         {studentPagesInfo.map((page, index) => {
           return <Card item={page} key={index} />;

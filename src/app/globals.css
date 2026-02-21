@@ -61,3 +61,15 @@ input:focus, select:focus, textarea:focus {
   bottom: -5px;
   transition: all 0.4s ease;
 }
+
+@keyframes showModal {
+  from{
+    transform: translate3d(0px, -10px, 0px);
+  }to{
+    transform: translate3d(0px, 0px, 0px );
+
+  }
+} 
+.animate-show-modal{
+  animation: showModal 0.7s ease-out
+}

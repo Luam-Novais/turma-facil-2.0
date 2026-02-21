@@ -4,37 +4,47 @@ import { CreateStudentDTO } from '@/src/types/students';
 import { Input, Select, TextArea } from '@/src/components/input';
 import { Button } from '@/src/components/button';
 import { useState } from 'react';
-import { data_post } from '@/src/utils/fecthOpt';
+import {toast, ToastContainer} from 'react-toastify'
 import { TitlePage } from '@/src/components/header';
 import { createStudentService } from '@/src/service/studentService';
+import { PageContainer } from '@/src/components/container';
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, reset } = useForm<CreateStudentDTO>();
+  const notifySucess = (message: string)=> {
+    toast(message, {
+      type: 'success'
+    });
+  }
+const notifyError = (message:string) => {
+  toast(message, {
+    type: 'error',
+  });
+};
   const onSubmit: SubmitHandler<CreateStudentDTO> = async (data) => {
     try {
       if(!subscriptionTypes.includes(data.subscription_type)){
-        alert('O campo de vínculo deve ter um valor válido.');
+        notifyError('O campo de vínculo deve ter um valor válido.');
         throw new Error()
       }
-      setError(null);
       setLoading(true);
       const {response, json} = await createStudentService(data)
       if(response.ok){
+        notifySucess(json.message)
         reset()
+      }else{
+        notifyError('Ocorreu um erro ao criar o aluno. Por favor, tente novamente.');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setError('Ocorreu um erro ao criar o aluno. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
   };
   return (
-    <div className="flex flex-col gap-4 p-4 min-h-screen bg-gray-100 rounded-md shadow-xl">
+    <PageContainer>
       <TitlePage title="Criar Aluno" />
-      {error && <p className='text-red-600'>{error}</p>}
       <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 bg-white p-4 rounded shadow">
         <Input label="Nome" register={register('name', {required: true})} />
         <Input label="Telefone" register={register('phone', {required: true})} />
@@ -44,7 +54,8 @@ export default function Page() {
         <Select options={subscriptionTypes} register={register('subscription_type', {required: true})} />
         <Button loadingState={loading}>Criar</Button>
       </form>
-    </div>
+      <ToastContainer/>
+    </PageContainer>
   );
 }
 const subscriptionTypes = ['EXPERIMENTAL', 'MENSAL_1X', 'MENSAL_2X'];

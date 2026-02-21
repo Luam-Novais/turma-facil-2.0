@@ -6,25 +6,30 @@ export async function getStudents() {
   const response = await fetch(url, options as Request)
   const json = await response.json()
   return {response, json}
+}export async function getStudentsBySearch(searchValue: string) {
+  const { url, options } = data_get(`student/get-by-search?searchName=${searchValue}`);
+  const response = await fetch(url, options as Request);
+  const json = await response.json();
+  return { response, json };
 }
 export async function createStudentService(data: CreateStudentDTO) {
   const { url, options } = data_post('student/create', data);
   const response = await fetch(url, options as RequestInit);
   const json = await response.json();
-  console.log(response, json);
+
   return { response, json };
 }
 export async function updateStudentService(student_id: number, data:UpdateStudentDTO){
     const { url, options } = data_put(`student/update?id=${student_id}`, data);
     const response = await fetch(url, options as RequestInit)
     const json = await response.json()
-    console.log(response, json)
     return { response, json };
 }
 export async function handleStatusService(student_id: number, currentStatus: boolean) {
   const status = returnStatusString(currentStatus)
-  const { url, options } = data_put_no_body(`student/${status}?id=${student_id}`);
-  const response = await fetch(url, options as Request);
+  const dataStatus = {status: currentStatus}
+  const { url, options } = data_put(`student/${status}?id=${student_id}`, dataStatus); 
+  const response = await fetch(url, options as RequestInit);
   const json = await response.json();
   return { response, json };
 }
