@@ -34,7 +34,7 @@ export function Input({ label, type, placeholder, register }: Input) {
       <label className="block" htmlFor="input">
         {label}
       </label>
-      <input type={type} id="input" {...register}  className="border border-gray-400 rounded-md text-sm w-full shadow bg-gray-100 p-2" placeholder={placeholder} />
+      <input type={type} id="input" {...register}  className="text-base border border-gray-400 rounded-md w-full shadow bg-gray-100 p-2" placeholder={placeholder} />
     </span>
   );
 }
@@ -49,7 +49,7 @@ export function InputPassword({ label, register }: InputPassword) {
         {label}
       </label>
       <span className="relative flex">
-        <input type={isVisible ? 'text' : 'password'} id="inputPass" {...register}  className="border border-gray-400 rounded-sm text-sm w-full shadow bg-gray-100 p-2" />
+        <input type={isVisible ? 'text' : 'password'} id="inputPass" {...register}  className="text-base border border-gray-400 rounded-sm w-full shadow bg-gray-100 p-2" />
        <button type='button' className='absolute right-1 top-2' onClick={handleVisibilityButton}>{isVisible ? <EyeClosed color='gray' size={20}/> : <Eye color='gray' size={20}/> }</button>
       </span>
     </span>
@@ -62,7 +62,7 @@ export function TextArea({ label, register }: Input) {
       <label className="block" htmlFor="inputTextArea">
         {label}
       </label>
-      <textarea id="inputTextArea" {...register} className="border border-gray-400 rounded-sm text-sm w-full shadow bg-gray-100 p-2" />
+      <textarea id="inputTextArea" {...register} className="border border-gray-400 rounded-sm w-full shadow bg-gray-100 p-2" />
     </span>
   );
 }
