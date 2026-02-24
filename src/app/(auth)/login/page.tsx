@@ -33,13 +33,13 @@ export default function Login(){
     }
   }
     return (
-      <div className="p-4 flex flex-col gap-4 ">
+      <div className="p-4 flex flex-col gap-4 h-screen">
         <span>
           <h1>Login</h1>
           <p className="text-sm text-gray-600">Entre com seu nome de usuário e senha</p>
           {error && <p className="text-red-600">{error}</p>}
         </span>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+        <form className="flex flex-col gap-4 " onSubmit={handleSubmit(onSubmit)}>
           <Input label="Nome de usuário" type="text" placeholder="" register={register('identifier')} />
           <InputPassword label="Senha" type="password" register={register('password')} />
           <Button loadingState={loading}>Entrar</Button>

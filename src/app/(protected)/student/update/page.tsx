@@ -53,12 +53,12 @@ export default function Page() {
   return (
     <PageContainer>
       <ToastContainer />
-      <TitlePage title="Editar aluno" />
+      <TitlePage title="Editar aluno" href="/student" />
       <div className="flex flex-col gap-4 p-4 min-h-screen h-full bg-white rounded-md shadow-md">
         <h1>Lista de alunos</h1>
         <p>Total: {students.length}</p>
-        {modal && <UpdateModal/>}
-        <List students={students} TypeCard={CardUpdate}/>
+        {modal && <UpdateModal />}
+        <List students={students} TypeCard={CardUpdate} />
       </div>
     </PageContainer>
   );

@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { LucideIcon, Trash } from 'lucide-react';
+import { LucideIcon, Trash, Check } from 'lucide-react';
 import { StudentWithSubscription } from '../types/students';
 import React, { useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp, Pencil } from 'lucide-react';
@@ -8,6 +8,7 @@ import { formatDate } from '../utils/formatDate';
 import { useOpenModal } from '../stores/modalStore';
 import { handleStatusService } from '../service/studentService';
 import { formatName } from '../utils/formatName';
+import { useFormContext } from 'react-hook-form';
 
 export interface CardProps {
   href: string;
@@ -27,16 +28,16 @@ export function Card({ item }: { item: CardProps }) {
   );
 }
 type ContainerCardProps = {
-  student: StudentWithSubscription
-  children: React.ReactNode
-  isActive: boolean
-}
-export function ContainerCard({student, children, isActive}: ContainerCardProps){
-   const [isOpen, setIsOpen] = useState<boolean>(false);
-   const studentName = formatName(student.name as string)
-   function handleDropState() {
-     setIsOpen((prev) => !prev);
-   }
+  student: StudentWithSubscription;
+  children: React.ReactNode;
+  isActive: boolean;
+};
+export function ContainerCard({ student, children, isActive }: ContainerCardProps) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const studentName = formatName(student.name as string);
+  function handleDropState() {
+    setIsOpen((prev) => !prev);
+  }
   return (
     <li onClick={handleDropState}>
       <div className={`flex flex-col gap-4 border border-gray-300 p-2 shadow-xl rounded-sm content-center ${isActive ? 'inactive' : ''}`}>
@@ -51,7 +52,7 @@ export function ContainerCard({student, children, isActive}: ContainerCardProps)
   );
 }
 export function CardStudent({ student }: { student: StudentWithSubscription }) {
-  const isActive = student.subscription.isActive
+  const isActive = student.subscription.isActive;
 
   return (
     <ContainerCard student={student} isActive={isActive}>
@@ -88,10 +89,10 @@ function InfoCard({ title, desc }: InfoCardProps) {
   }
 }
 export function CardUpdate({ student }: { student: StudentWithSubscription; index: number }) {
-  const { handleModal } = useOpenModal();
+  const { handleModalToStudent } = useOpenModal();
   const [isActive, setIsActive] = useState<boolean>(student.subscription.isActive);
   function activeModal() {
-    handleModal(true, student.id);
+    handleModalToStudent(true, student.id);
   }
   async function handleStatusStudent() {
     try {
@@ -104,7 +105,7 @@ export function CardUpdate({ student }: { student: StudentWithSubscription; inde
     }
   }
   return (
-    <ContainerCard isActive={isActive} student={student} >
+    <ContainerCard isActive={isActive} student={student}>
       <span className={`flex justify-between gap-3 text-sm min-w-full`}>
         <button onClick={handleStatusStudent}>{isActive ? 'Desativar Cadastro' : 'Ativar Cadastro'}</button>
         <button onClick={activeModal} className="max-w-fit px-4 py-1.5 rounded-sm shadow bg-yellow-500 flex gap-2 justify-center items-center text-yellow-900">
@@ -116,18 +117,54 @@ export function CardUpdate({ student }: { student: StudentWithSubscription; inde
   );
 }
 export function CardDelete({ student }: { student: StudentWithSubscription; index: number }) {
-  const {handleModal} = useOpenModal()
-  function activeModal(){
-    handleModal(true, student.id)
+  const { handleModalToStudent } = useOpenModal();
+  function activeModal() {
+    handleModalToStudent(true, student.id);
   }
 
   return (
     <li key={student.id} className="flex justify-between border border-gray-300 shadow-md rounded-md px-2 py-1 md:px-4 items-center ">
-      
       <p>{student.name}</p>
       <button className="flex justify-center gap-2 items-center bg-red-600 px-4 py-2 text-white shadow-xl rounded-md" onClick={activeModal}>
         {<Trash size={16} />}
       </button>
     </li>
+  );
+}
+type CardSelectedStudentProps = {
+  student: StudentWithSubscription;
+  setSelectedStudent: (value: number | null) => void;
+  selectedStudent: number | null;
+};
+export function CardSelectedStudent({ student, setSelectedStudent, selectedStudent }: CardSelectedStudentProps) {
+  const { handleModal } = useOpenModal();
+  const {setValue} = useFormContext()
+  function desactiveModal() {
+    handleModal(false);
+  }
+  function handleSelectedStudent(){
+   if ((selectedStudent === student.id)){
+     setSelectedStudent(null);
+   setValue('student_id', null)
+
+     return
+   }
+   setSelectedStudent(student.id);
+   setValue('student_id', student.id)
+    desactiveModal()
+  }
+  function verifyStudent() {
+    return selectedStudent === student.id;
+  }
+  return (
+    <button
+     type='button'
+      className={`border border-gray-300 rounded-md shadow-md bg-white p-2 text-left flex justify-between 
+      items-center min-w-full w-full ${verifyStudent() ? 'border-green-600 bg-green-100' : ''}`}
+      onClick={handleSelectedStudent}
+    >
+      {formatName(student.name)}
+      {verifyStudent() ? <Check color="green" /> : ''}
+    </button>
   );
 }

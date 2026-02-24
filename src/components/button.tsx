@@ -1,7 +1,7 @@
 import React from 'react';
 import { SpinnerWithButton } from './spinner';
 
-interface ButtonProps {
+type ButtonProps = {
   children: React.ReactNode;
   loadingState: boolean;
 }
@@ -13,4 +13,13 @@ export function Button({ children, loadingState }: ButtonProps) {
       {loadingState ? <SpinnerWithButton /> : ''}
     </button>
   );
+}
+type ButtonCloseModal = {
+  children: React.ReactNode;
+  desactiveModal: ()=> void
+}
+export function ButtonCloseModal({children, desactiveModal}: ButtonCloseModal){
+  return(
+    <button className='text-red-600' onClick={desactiveModal}>{children}</button>
+  )
 }

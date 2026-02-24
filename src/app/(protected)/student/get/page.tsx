@@ -62,7 +62,7 @@ export default function Home() {
 
     return (
       <PageContainer>
-        <TitlePage title='Central de Alunos'/>
+        <TitlePage title="Central de Alunos" href="/student" />
         <form onSubmit={handleSubmit(onSubmit)}>
           <SearchInput placeholder="Buscar Aluno" type="text" register={register('searchValue')} />
         </form>

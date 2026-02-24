@@ -27,14 +27,14 @@ export default function Page() {
   const {modal} = useOpenModal()
 
     const { toastState } = useToastStore();
-    const notifySucess = (message: string, state: 'error' | 'success') => {
+    const notifyToast = (message: string, state: 'error' | 'success') => {
       toast(message, {
         type: state,
       });
     };
     useEffect(() => {
       if (toastState.isVisible) {
-        notifySucess(toastState.message, toastState.state as 'error' | 'success');
+        notifyToast(toastState.message, toastState.state as 'error' | 'success');
       }
     }, [toastState]);
 
@@ -92,8 +92,8 @@ export default function Page() {
 
   return (
     <PageContainer>
-      <ToastContainer/>
-      <TitlePage title="Deletar aluno" />
+      <ToastContainer />
+      <TitlePage title="Deletar aluno" href="/student" />
       <div className="flex flex-col gap-4 p-4 min-h-screen h-full bg-white rounded-md">
         <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-start gap-1.5">
           <SearchInput placeholder="Buscar Aluno" type="text" register={register('searchValue')} />

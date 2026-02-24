@@ -1,25 +1,28 @@
 import { useOpenModal } from '../stores/modalStore';
-import { UpdateStudentDTO } from '../types/students';
-import { Input, Select, TextArea } from './input';
-import { Button } from './button';
+import { StudentWithSubscription, UpdateStudentDTO } from '../types/students';
+import { Input, SearchInput, Select, TextArea } from './input';
+import { Button, ButtonCloseModal } from './button';
 import { X } from 'lucide-react';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { deleteStudentService, updateStudentService } from '../service/studentService';
+import React, { useEffect, useState } from 'react';
+import { SubmitHandler, useForm, useFormContext } from 'react-hook-form';
+import { deleteStudentService, updateStudentService, getStudentsBySearch } from '../service/studentService';
 import { useToastStore } from '../stores/toastStore';
 import { Spinner } from './spinner';
+import { List } from './list';
+import { CardSelectedStudent } from './card';
+import { ErrorInfo } from './error';
 
-function ContainerModal({children}: {children: React.ReactNode}){
+function ContainerModal({ children }: { children: React.ReactNode }) {
   return <div className="bg-black/45 absolute top-0 left-0 flex justify-center  p-4 md:p-8 w-full h-full backdrop-blur-md transition-colors duration-1000 ease-in-out">{children}</div>;
 }
 
 export function UpdateModal() {
   const { setToast } = useToastStore();
-  const { handleModal, student_id } = useOpenModal();
+  const { handleModalToStudent, student_id } = useOpenModal();
   const { handleSubmit, register } = useForm<UpdateStudentDTO>();
   const [loading, setLoading] = useState<boolean>(false);
   function desactiveModal() {
-    handleModal(false, null);
+    handleModalToStudent(false, null);
   }
   const onSubmit: SubmitHandler<UpdateStudentDTO> = async (data) => {
     try {
@@ -43,7 +46,7 @@ export function UpdateModal() {
   };
   return (
     <ContainerModal>
-      <div className="bg-gray-50 shadow-md w-full h-full rounded-md p-4 flex flex-col gap-4 ">
+      <div className="bg-gray-50 shadow-md w-full h-full rounded-md p-4 flex flex-col gap-4 animate-show-modal">
         <span className="flex justify-between">
           <h1>Editar aluno</h1>
           <button onClick={desactiveModal}>
@@ -68,11 +71,11 @@ const subscriptionTypes = ['EXPERIMENTAL', 'MENSAL_1X', 'MENSAL_2X'];
 
 export function DeleteModal() {
   const { setToast } = useToastStore();
-  const { handleModal, student_id } = useOpenModal();
+  const { handleModalToStudent, student_id } = useOpenModal();
   const [loading, setLoading] = useState<boolean>(false);
 
   function desactiveModal() {
-    handleModal(false, null);
+    handleModalToStudent(false, null);
   }
 
   async function deleteStudent() {
@@ -115,6 +118,70 @@ export function DeleteModal() {
             </span>
           </>
         )}
+      </div>
+    </ContainerModal>
+  );
+}
+type SearchStudentsModalProps = {
+  setSelectedStudent: (value: number | null) => void;
+  selectedStudent: number | null;
+};
+export function SearchStudentModal({ setSelectedStudent, selectedStudent }: SearchStudentsModalProps) {
+  const { handleModal } = useOpenModal();
+  const [search, setSearch] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [resultStudents, setResultStudents] = useState<StudentWithSubscription[] | null>(null);
+  const { setValue } = useFormContext();
+  function desactiveModal() {
+    handleModal(false);
+  }
+  async function fetchStudentsBySearch() {
+    if (!search || search.length <= 0) return;
+    try {
+      setLoading(true);
+      const { response, json } = await getStudentsBySearch(search);
+      setResultStudents(json);
+    } catch (error: any) {
+      console.error(error);
+      throw new Error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearch(e.target.value);
+  }
+  useEffect(() => {
+    setResultStudents(null);
+    const delay = setTimeout(() => {
+      fetchStudentsBySearch();
+      setLoading(false);
+    }, 400);
+    return () => {
+      clearTimeout(delay);
+    };
+  }, [search]);
+  return (
+    <ContainerModal>
+      <div className="animate-show-modal h-full bg-white w-full rounded-md shadow-md p-4 flex flex-col gap-4">
+        <span className="flex items-center justify-between ">
+          <h1>Busque o aluno(a)</h1>
+          <ButtonCloseModal desactiveModal={desactiveModal}>
+            <X />
+          </ButtonCloseModal>
+        </span>
+
+        <label htmlFor="search">Buscar aluno</label>
+        <input id="search" type="text" onChange={handleChange} className="text-base border border-gray-400 rounded-sm w-full shadow bg-gray-100 p-2" placeholder="Buscar aluno..." />
+        {loading && <Spinner />}
+        {resultStudents && resultStudents.length > 0 && (
+          <div className="bg-gray-100 px-1 py-4 rounded-md shadow-md">
+            {resultStudents.map((student) => (
+              <CardSelectedStudent selectedStudent={selectedStudent} key={student.id} student={student} setSelectedStudent={setSelectedStudent} />
+            ))}
+          </div>
+        )}
+        {resultStudents && resultStudents.length === 0 && <p>Nenhum aluno encotrado com esse nome.</p>}
       </div>
     </ContainerModal>
   );

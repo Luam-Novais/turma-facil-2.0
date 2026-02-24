@@ -44,7 +44,7 @@ const notifyError = (message:string) => {
   };
   return (
     <PageContainer>
-      <TitlePage title="Criar Aluno" />
+      <TitlePage title="Criar Aluno" href='/student'/>
       <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 bg-white p-4 rounded shadow">
         <Input label="Nome" register={register('name', {required: true})} />
         <Input label="Telefone" register={register('phone', {required: true})} />

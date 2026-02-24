@@ -64,12 +64,13 @@ input:focus, select:focus, textarea:focus {
 
 @keyframes showModal {
   from{
-    transform: translate3d(0px, -10px, 0px);
-  }to{
-    transform: translate3d(0px, 0px, 0px );
-
-  }
+        opacity: 0;
+        transform: scale(0.5);
+    }to{
+        opacity: 1;
+        transform: scale(1);
+    }
 } 
 .animate-show-modal{
-  animation: showModal 0.7s ease-out
+  animation: showModal 0.4s ease-out
 }

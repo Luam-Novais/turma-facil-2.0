@@ -50,7 +50,7 @@ export function InputPassword({ label, register }: InputPassword) {
       </label>
       <span className="relative flex">
         <input type={isVisible ? 'text' : 'password'} id="inputPass" {...register}  className="text-base border border-gray-400 rounded-sm w-full shadow bg-gray-100 p-2" />
-       <button type='button' className='absolute right-1 top-2' onClick={handleVisibilityButton}>{isVisible ? <EyeClosed color='gray' size={20}/> : <Eye color='gray' size={20}/> }</button>
+       <button type='button' className='absolute right-1 top-2' onClick={handleVisibilityButton}>{isVisible ? <EyeClosed color='gray' size={30}/> : <Eye color='gray' size={30}/> }</button>
       </span>
     </span>
   );
@@ -71,7 +71,7 @@ export function Select<T extends string[]>({ options, register }: { options: T; 
   return (
     <span>
       <select id="select" {...register} className="border border-gray-400 rounded shadow px-5 py-2 w-full ">
-        <option value='undefined'>Escolher Vínculo</option>
+        <option value='undefined'>Escolher</option>
         {options?.map((opt, index) => {
           return (
             <option key={index} value={opt}>

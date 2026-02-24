@@ -24,10 +24,10 @@ export function HeaderMobile({isActive}: {isActive:string}) {
     </header>
   );
 }
-export function TitlePage({title}: {title: string}){
+export function TitlePage({title, href}: {title: string, href:string}){
   return (
     <span className="flex gap-4 items-center">
-      <Link href={'/student'}>
+      <Link href={href}>
         <ArrowLeft />
       </Link>
       <h1>{title}</h1>
