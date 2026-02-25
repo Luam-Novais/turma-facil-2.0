@@ -5,6 +5,7 @@ import { loginService } from "@/src/service/loginService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Link from "next/link";
 
 interface AuthCredentialsDTO{
   identifier: string,
@@ -33,7 +34,7 @@ export default function Login(){
     }
   }
     return (
-      <div className="p-4 flex flex-col gap-4 h-screen">
+      <div className="p-4 flex flex-col gap-6 h-screen">
         <span>
           <h1>Login</h1>
           <p className="text-sm text-gray-600">Entre com seu nome de usuário e senha</p>
@@ -44,6 +45,9 @@ export default function Login(){
           <InputPassword label="Senha" type="password" register={register('password')} />
           <Button loadingState={loading}>Entrar</Button>
         </form>
+        <Link className="text-right text-gray-600" href="create">
+          Criar conta
+        </Link>
       </div>
     );
 }

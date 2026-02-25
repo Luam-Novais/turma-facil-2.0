@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { TeacherCreateDTO } from "@/src/types/auth";
 import { createAccountService } from "@/src/service/loginService";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function Page(){
     const {handleSubmit, register, reset} = useForm<TeacherCreateDTO>()
@@ -29,7 +30,7 @@ export default function Page(){
         }
     }
     return (
-      <div className="p-4 flex flex-col gap-4 h-screen">
+      <div className="p-4 flex flex-col gap-6 h-screen">
         <span>
           <h1>Criar conta</h1>
           <p className="text-sm text-gray-600">Sistema Exclusivo para apenas um usuário.</p>
@@ -41,6 +42,9 @@ export default function Page(){
           <InputPassword label="Senha" type="password" register={register('password')} />
           <Button loadingState={loading}>Entrar</Button>
         </form>
+        <Link className="text-right text-gray-600" href={'/login'}>
+          Ja possui uma conta ? Entrar
+        </Link>
       </div>
     );
 }
