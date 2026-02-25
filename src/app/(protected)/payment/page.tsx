@@ -1,5 +1,5 @@
 'use client';
-import { Card, CardProps } from '@/src/components/card';
+import { Card} from '@/src/components/card';
 import { Plus, List } from 'lucide-react';
 
 export default function Page() {
@@ -25,7 +25,7 @@ const paymentsPagesInfo = [
   {
     href: '/payment/create',
     icon: Plus,
-    title: 'Criar Pagamentos',
+    title: 'Criar Pagamento',
     desc: 'Adicione os pagamentos feitos pelos alunos.',
   },
 ];

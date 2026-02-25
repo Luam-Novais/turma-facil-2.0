@@ -19,7 +19,7 @@ export default function Page(){
     const [loading, setLoading] = useState<boolean>(false)
     const {modal, handleModal} = useOpenModal()
     const methods = useForm<CreatePaymentDTO>()
-    const {register, handleSubmit, watch} = methods
+    const {register, handleSubmit, watch, reset} = methods
     const studentId = watch('student_id')
 
     function activeModal(){
@@ -34,6 +34,7 @@ export default function Page(){
           const {response, json } = await createPaymentService(data)
           if(response.ok){
             notifyToast(json.message, 'success')
+            reset()
           }else notifyToast(json.messageError, 'error')
     }
     return (
@@ -60,4 +61,4 @@ export default function Page(){
     );
 }
 
-const reasonsPayment = ['mensal_2x', 'mensal_1x', 'aula avulsa', 'experimental', 'Experimental + matricula', 'Matricula + mensal'];
+const reasonsPayment = ['mensal_2x', 'mensal_1x', 'aula_avulsa', 'experimental', 'experimental_E_mensal', 'matricula_E_mensal'];

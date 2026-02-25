@@ -131,7 +131,6 @@ export function SearchStudentModal({ setSelectedStudent, selectedStudent }: Sear
   const [search, setSearch] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [resultStudents, setResultStudents] = useState<StudentWithSubscription[] | null>(null);
-  const { setValue } = useFormContext();
   function desactiveModal() {
     handleModal(false);
   }

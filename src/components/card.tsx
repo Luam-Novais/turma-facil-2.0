@@ -2,13 +2,15 @@
 import Link from 'next/link';
 import { LucideIcon, Trash, Check } from 'lucide-react';
 import { StudentWithSubscription } from '../types/students';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Pencil } from 'lucide-react';
 import { formatDate } from '../utils/formatDate';
 import { useOpenModal } from '../stores/modalStore';
 import { handleStatusService } from '../service/studentService';
 import { formatName } from '../utils/formatName';
 import { useFormContext } from 'react-hook-form';
+import { PaymentWithStudent } from '../types/payment';
+import { formatPrices } from '../utils/formats';
 
 export interface CardProps {
   href: string;
@@ -166,5 +168,23 @@ export function CardSelectedStudent({ student, setSelectedStudent, selectedStude
       {formatName(student.name)}
       {verifyStudent() ? <Check color="green" /> : ''}
     </button>
+  );
+}
+type CardPaymentProps = {
+  paymentData: PaymentWithStudent
+}
+export function CardPayment({paymentData}: CardPaymentProps){
+  return (
+    <li className="flex flex-col gap-2 bg-gray-50 border border-gray-200 rounded-md shadow-md p-4">
+      <span className="flex justify-between">
+        <p className="font-semibold">{formatName(paymentData.student.name)}</p>
+        <p className="font-semibold">{formatPrices(paymentData.value)}</p>
+      </span>
+      <span className="text-sm flex justify-between">
+        <p>{formatName(paymentData.payment_method)}</p>
+        <p>{paymentData.payment_reason}</p>
+        <p>{formatDate(paymentData.payment_date)}</p>
+      </span>
+    </li>
   );
 }

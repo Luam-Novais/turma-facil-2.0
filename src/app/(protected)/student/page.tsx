@@ -40,9 +40,4 @@ const studentPagesInfo: CardProps[] = [
     title: 'Deletar',
     desc: 'Exclua um aluno.',
   },
-  //   {
-  //     href: '/student/',
-  //     icon: Plus,
-  //     title: '',
-  //   },
 ];
