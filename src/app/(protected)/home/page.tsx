@@ -14,7 +14,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const { register, handleSubmit, reset } = useForm<SearchStudentDTO>();
+  const {reset } = useForm<SearchStudentDTO>();
   const [searchedStudents, setSearchedStudents] = useState<StudentWithSubscription[] | null>(null);
   const [students, setStudents] = useState<StudentWithSubscription[] | null>(null);
 

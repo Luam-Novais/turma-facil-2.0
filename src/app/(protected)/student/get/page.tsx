@@ -17,6 +17,8 @@ export default function Home() {
   const { register, handleSubmit, reset } = useForm<SearchStudentDTO>();
   const [searchedStudents, setSearchedStudents] = useState<StudentWithSubscription[] | null>(null);
   const [students, setStudents] = useState<StudentWithSubscription[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
 
   const cleanSearch = () => {
     setSearchedStudents(null);
@@ -26,7 +28,7 @@ export default function Home() {
     const fetchStudents = async () => {
       try {
         setLoading(true);
-       const {response, json} = await getStudents()
+        const { response, json } = await getStudents();
         if (!response.ok) throw new Error(json.messageError);
         setStudents(json);
       } catch (error: any) {
@@ -37,49 +39,65 @@ export default function Home() {
     };
     fetchStudents();
   }, []);
-  const onSubmit: SubmitHandler<SearchStudentDTO> = async (data) => {
-    try {
-      setLoading(true);
-      setSearchValue(data.searchValue);
-      const {response, json} = await getStudentsBySearch(data.searchValue)
-      if (!response.ok) throw new Error(json.messageError);
-      setSearchedStudents(json);
-    } catch (error: any) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      const fetchSearchStudent = async (search: string) => {
+        try {
+          const { response, json } = await getStudentsBySearch(search);
+          setLoading(true);
+          if (response.ok) {
+            setSearchedStudents(json);
+          } else {
+            setError(json.messageError);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      useEffect(() => {
+        if (!searchValue || searchValue.length < 0 || searchValue === null) {
+          setError('Pesquisa inváldia.');
+          return;
+        }
+        const delay = setTimeout(() => {
+          fetchSearchStudent(searchValue);
+        }, 600);
+
+        return () => clearTimeout(delay);
+      }, [searchValue]);
+
+      function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchValue(e.target.value);
+      }
   if (loading)
     return (
       <div className="flex justify-center content-center pt-10">
         <Spinner />
       </div>
     );
-  if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde."  href='/student' />;
-  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno."  href='/student' />;
-    if (searchedStudents && searchedStudents.length === 0) return <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente." href='/student'/>;
 
-    return (
-      <PageContainer>
-        <TitlePage title="Central de Alunos" href="/student" />
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <SearchInput placeholder="Buscar Aluno" type="text" register={register('searchValue')} />
-        </form>
-        <div className="flex flex-col gap-4 bg-white p-4 rounded-md shadow-md">
-          <span>
-            <h1>{searchedStudents ? `Resultados para a busca: ${searchValue}` : 'Seus Alunos'}</h1>
-            {searchedStudents && (
-              <button onClick={cleanSearch} className="text-gray-500 border-b border-gray-300 ">
-                Limpar busca
-              </button>
-            )}
-          </span>
+  return (
+    <PageContainer>
+      <TitlePage title="Central de Alunos" href="/student" />
+      <form>
+        <SearchInput placeholder="Buscar Aluno" type="text" handleChange={handleChange} />
+      </form>
+      <div className="flex flex-col gap-4 bg-white p-4 rounded-md shadow-md">
+        <span>
+          <h1>{searchedStudents ? `Resultados para a busca: ${searchValue}` : 'Seus Alunos'}</h1>
+          {searchedStudents && (
+            <button onClick={cleanSearch} className="text-gray-500 border-b border-gray-300 ">
+              Limpar busca
+            </button>
+          )}
+        </span>
+        {students && (
           <>
             <h3>Total: {students.length}</h3>
             {searchedStudents ? <ListStudents students={searchedStudents} /> : <ListStudents students={students} />}
           </>
-        </div>
-      </PageContainer>
-    );
+        )}
+      </div>
+    </PageContainer>
+  );
 }

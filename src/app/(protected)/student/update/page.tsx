@@ -47,8 +47,8 @@ export default function Page() {
   }, []);
 
   if(loading) return <Spinner/>
-  if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde." href='/update'/>;
-  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno." href='/student/update' />;
+  if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde." />;
+  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno." />;
 
   return (
     <PageContainer>
