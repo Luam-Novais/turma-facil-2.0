@@ -15,14 +15,14 @@ export default function Login(){
   const {handleSubmit, register} = useForm<AuthCredentialsDTO>()
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null);
-  const redirect = useRouter()
+  const router = useRouter()
   const onSubmit: SubmitHandler<AuthCredentialsDTO> = async (data)=>{
     try {
       setLoading(true)
-      const { res, json } = await loginService(data);
-      if(res.ok){
+      const { response, json } = await loginService(data);
+      if(response.ok){
         setError(null)
-        redirect.push('/')        
+        router.push('/home')        
       }
       else{
         setError(json.messageError)

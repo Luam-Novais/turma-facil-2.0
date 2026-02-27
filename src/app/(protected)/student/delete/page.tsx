@@ -21,6 +21,7 @@ type SearchStudentDTO = { searchValue: string };
 export default function Page() {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { register, handleSubmit, reset } = useForm<SearchStudentDTO>();
   const [searchedStudents, setSearchedStudents] = useState<StudentWithSubscription[] | null>(null);
   const [students, setStudents] = useState<StudentWithSubscription[] | null>(null);
@@ -40,7 +41,7 @@ export default function Page() {
 
   const cleanSearch = () => {
     setSearchedStudents(null);
-    reset();
+    setSearchValue(null)
   };
   useEffect(() => {
     const fetchStudents = async () => {
@@ -57,19 +58,35 @@ export default function Page() {
     };
     fetchStudents();
   }, []);
-  const onSubmit: SubmitHandler<SearchStudentDTO> = async (data) => {
-    try {
-      setLoading(true);
-      setSearchValue(data.searchValue);
-      const { response, json } = await getStudentsBySearch(data.searchValue);
-      if (!response.ok) throw new Error(json.messageError);
-      setSearchedStudents(json);
-    } catch (error: any) {
-      console.error(error.message);
-    } finally {
-      setLoading(false);
+      const fetchSearchStudent = async (search: string) => {
+        try {
+          const { response, json } = await getStudentsBySearch(search);
+          setLoading(true);
+          if (response.ok) {
+            setSearchedStudents(json);
+          } else {
+            setError(json.messageError);
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      useEffect(() => {
+        if (!searchValue || searchValue.length < 0 || searchValue === null) {
+          setError('Pesquisa inváldia.');
+          return;
+        }
+        const delay = setTimeout(() => {
+          fetchSearchStudent(searchValue);
+        }, 600);
+
+        return () => clearTimeout(delay);
+      }, [searchValue]);
+   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+      setSearchValue(e.target.value);
     }
-  };
     useEffect(() => {
       if (modal) {
        window.scrollTo(0,0)
@@ -85,9 +102,9 @@ export default function Page() {
         <Spinner />
       </div>
     );
-  if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde."  href='/student/delete' />;
-  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno." href='/student/delete' />;
-  if (searchedStudents && searchedStudents.length === 0) return <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente."  href='/student/delete'/>;
+  if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde." />;
+  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno."/>;
+  if (searchedStudents && searchedStudents.length === 0) return <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente."/ >;
 
 
   return (
@@ -95,14 +112,12 @@ export default function Page() {
       <ToastContainer />
       <TitlePage title="Deletar aluno" href="/student" />
       <div className="flex flex-col gap-4 p-4 min-h-screen h-full bg-white rounded-md">
-        <form action="" onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-start gap-1.5">
-          <SearchInput placeholder="Buscar Aluno" type="text" register={register('searchValue')} />
-          {searchedStudents && (
-            <button className="text-gray-500 py-4 px-2" onClick={cleanSearch}>
-              Limpar busca
-            </button>
-          )}
-        </form>
+        <SearchInput placeholder="Buscar Aluno" type="text" handleChange={handleChange} />
+        {searchedStudents && (
+          <button className="text-gray-500 text-left py-4 px-2" onClick={cleanSearch}>
+            Limpar busca
+          </button>
+        )}
         <div className="flex flex-col gap-4">
           {modal && <DeleteModal />}
           {searchedStudents && (

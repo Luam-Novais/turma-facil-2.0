@@ -3,6 +3,7 @@ import { data_get, data_post } from '../utils/fecthOpt';
 import { formatDate } from '../utils/formatDate';
 import { formatName } from '../utils/formatName';
 import { formatPrices } from '../utils/formats';
+import { apiFetch } from '../utils/apiFecth';
 
 interface TableBodyPayment {
   name: string;
@@ -11,9 +12,10 @@ interface TableBodyPayment {
   value: string;
   reason: string;
 }
+const tokenLocal = localStorage.getItem('token') || ''
 export async function createPaymentService(data: CreatePaymentDTO) {
-  const { url, options } = data_post('payment/create', data);
-  const response = await fetch(url, options as RequestInit);
+  const { url, options } = data_post('payment/create', data, tokenLocal);
+  const response = await apiFetch(url, options as RequestInit);
   const json = await response.json();
   return { response, json };
 }
@@ -28,8 +30,8 @@ export async function createReportService(payments: PaymentWithStudent[]) {
     };
   });
 
-  const { url, options } = data_post('report/payment', formatPayments);
-  const response = await fetch(url, options as RequestInit);
+  const { url, options } = data_post('report/payment', formatPayments, tokenLocal);
+  const response = await apiFetch(url, options as RequestInit);
   const blob = await response.blob();
   if(!response.ok) throw new Error("Erro ao gerar pdf.")
     
@@ -42,26 +44,26 @@ export async function createReportService(payments: PaymentWithStudent[]) {
   return { response, blob };
 }
 export async function getAllPaymentsService() {
-  const { url, options } = data_get('payment/get-payments');
-  const response = await fetch(url, options as RequestInit);
+  const { url, options } = data_get('payment/get-payments', tokenLocal);
+  const response = await apiFetch(url, options as RequestInit);
   const json = await response.json();
   return { response, json };
 }
 export async function getPaymentsService(path: string){
-   const { url, options } = data_get(`payment/${path}`);
-   const response = await fetch(url, options as RequestInit);
+   const { url, options } = data_get(`payment/${path}`, tokenLocal);
+   const response = await apiFetch(url, options as RequestInit);
    const json = await response.json();
    return { response, json };
 }
 export async function getCurrentMonthPaymentsService() {
-  const { url, options } = data_get('payment/get-current-month-payments');
-  const response = await fetch(url, options as RequestInit);
+  const { url, options } = data_get('payment/get-current-month-payments', tokenLocal);
+  const response = await apiFetch(url, options as RequestInit);
   const json = await response.json();
   return { response, json };
 }
 export async function getpaymentsByPeriodService(period: number) {
-  const { url, options } = data_get(`payment/get-payments-by-period?period=${period}`);
-  const response = await fetch(url, options as RequestInit);
+  const { url, options } = data_get(`payment/get-payments-by-period?period=${period}`, tokenLocal);
+  const response = await apiFetch(url, options as RequestInit);
   const json = await response.json();
   return { response, json };
 }

@@ -8,7 +8,7 @@ export function HeaderMobile({isActive}: {isActive:string}) {
   return (
     <header className={`w-full fixed bottom-0 p-4 justify-center bg-violet-600 ${modal ? 'hidden' : 'flex'}`}>
       <nav className="flex gap-5 justify-around w-full">
-        <Link href={'/'} className={`${isActive === '/' ? 'activeLink' : ''}`}>
+        <Link href={'/home'} className={`${isActive === '/home' ? 'activeLink' : ''}`}>
           <Home color="white" />
         </Link>
         <Link href={'/payment'} className={`${isActive.includes('/payment') ? 'activeLink' : ''}`}>

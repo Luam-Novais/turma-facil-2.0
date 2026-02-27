@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Eye,EyeClosed, Search } from "lucide-react"
 import { UseFormRegisterReturn } from "react-hook-form"
+import { getStudentsBySearch } from '../service/studentService';
 
 interface SearchInputProps{
     placeholder:string,
     type: string,
-    register: UseFormRegisterReturn,
+    handleChange: (e: React.ChangeEvent<HTMLInputElement>)=> void
 }
-export function SearchInput({placeholder, type, register}: SearchInputProps){
+export function SearchInput({placeholder, type, handleChange}: SearchInputProps){
     return (
-      <span className="flex shadow-xl min-w-full w-full ">
-        <input type={type} {...register} placeholder={placeholder} className="w-full bg-gray-100 h-8 border-l border-b border-t border-gray-400 rounded-l-md py-5 px-2" />
-        <button type="submit" className="bg-violet-600 border border-violet-700 px-6 rounded-r-md">
+      <span className="min-w-full w-full ">
+        <input onChange={handleChange} type={type} placeholder={placeholder} className="w-full bg-gray-100 h-8 border  border-gray-400 rounded-md py-5 px-2" />
+        {/* <button type="submit" className="bg-violet-600 border border-violet-700 px-6 rounded-r-md">
           <Search color="white" size={18} />
-        </button>
+        </button> */}
       </span>
     );
 }
