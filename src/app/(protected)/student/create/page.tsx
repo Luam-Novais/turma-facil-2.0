@@ -51,7 +51,7 @@ const notifyError = (message:string) => {
         <Input label="CPF" register={register('cpf', {required: true})} />
         <Input label="Data de Nascimento" type="date" register={register('date_birth', {required: true})} />
         <TextArea label="Observações" register={register('observations', { required: false })} />
-        <Select options={subscriptionTypes} register={register('subscription_type', {required: true})} />
+        <Select label= 'Escolher Vínculo' options={subscriptionTypes} register={register('subscription_type', {required: true})} />
         <Button loadingState={loading}>Criar</Button>
       </form>
       <ToastContainer/>

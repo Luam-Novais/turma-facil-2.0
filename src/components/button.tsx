@@ -14,12 +14,21 @@ export function Button({ children, loadingState }: ButtonProps) {
     </button>
   );
 }
-type ButtonCloseModal = {
+type ButtonCloseModalProps = {
   children: React.ReactNode;
   desactiveModal: ()=> void
 }
-export function ButtonCloseModal({children, desactiveModal}: ButtonCloseModal){
+export function ButtonCloseModal({children, desactiveModal}: ButtonCloseModalProps){
   return(
     <button className='text-red-600' onClick={desactiveModal}>{children}</button>
+  )
+}
+type ButtonCleanSearchProps = {
+  children: React.ReactNode;
+  cleanSearch: () => void;
+};
+export function ButtonCleanSearch({ children, cleanSearch }: ButtonCleanSearchProps) {
+  return(
+    <button onClick={cleanSearch} className='text-gray-600 border border-gray-300 px-3 py-1 rounded-md shadow-md'>{children}</button>
   )
 }

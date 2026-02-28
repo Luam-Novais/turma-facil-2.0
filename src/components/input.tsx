@@ -12,9 +12,6 @@ export function SearchInput({placeholder, type, handleChange}: SearchInputProps)
     return (
       <span className="min-w-full w-full ">
         <input onChange={handleChange} type={type} placeholder={placeholder} className="w-full bg-gray-100 h-8 border  border-gray-400 rounded-md py-5 px-2" />
-        {/* <button type="submit" className="bg-violet-600 border border-violet-700 px-6 rounded-r-md">
-          <Search color="white" size={18} />
-        </button> */}
       </span>
     );
 }
@@ -68,11 +65,11 @@ export function TextArea({ label, register }: Input) {
   );
 }
 
-export function Select<T extends string[]>({ options, register }: { options: T; register: UseFormRegisterReturn }) {
+export function Select<T extends string[]>({label, options, register }: { label:string, options: T; register: UseFormRegisterReturn }) {
   return (
-    <span>
+    <span className='flex flex-col gap-2'>
+      <label htmlFor="">{label}</label>
       <select id="select" {...register} className="border border-gray-400 rounded shadow px-5 py-2 w-full ">
-        <option value='undefined'>Escolher</option>
         {options?.map((opt, index) => {
           return (
             <option key={index} value={opt}>

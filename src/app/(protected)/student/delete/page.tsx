@@ -7,15 +7,15 @@ import { TitlePage } from '@/src/components/header';
 import { SearchInput } from '@/src/components/input';
 import { StudentWithSubscription } from '@/src/types/students';
 import { useState } from 'react';
-import { useForm, SubmitHandler} from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { Spinner } from '@/src/components/spinner';
 import { List } from '@/src/components/list';
 import { CardDelete } from '@/src/components/card';
 import { useOpenModal } from '@/src/stores/modalStore';
 import { DeleteModal } from '@/src/components/modal';
-import {toast, ToastContainer} from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify';
 import { useToastStore } from '@/src/stores/toastStore';
-
+import { ButtonCleanSearch } from '@/src/components/button';
 
 type SearchStudentDTO = { searchValue: string };
 export default function Page() {
@@ -25,23 +25,23 @@ export default function Page() {
   const { register, handleSubmit, reset } = useForm<SearchStudentDTO>();
   const [searchedStudents, setSearchedStudents] = useState<StudentWithSubscription[] | null>(null);
   const [students, setStudents] = useState<StudentWithSubscription[] | null>(null);
-  const {modal} = useOpenModal()
+  const { modal } = useOpenModal();
 
-    const { toastState } = useToastStore();
-    const notifyToast = (message: string, state: 'error' | 'success') => {
-      toast(message, {
-        type: state,
-      });
-    };
-    useEffect(() => {
-      if (toastState.isVisible) {
-        notifyToast(toastState.message, toastState.state as 'error' | 'success');
-      }
-    }, [toastState]);
+  const { toastState } = useToastStore();
+  const notifyToast = (message: string, state: 'error' | 'success') => {
+    toast(message, {
+      type: state,
+    });
+  };
+  useEffect(() => {
+    if (toastState.isVisible) {
+      notifyToast(toastState.message, toastState.state as 'error' | 'success');
+    }
+  }, [toastState]);
 
   const cleanSearch = () => {
     setSearchedStudents(null);
-    setSearchValue(null)
+    setSearchValue(null);
   };
   useEffect(() => {
     const fetchStudents = async () => {
@@ -58,44 +58,44 @@ export default function Page() {
     };
     fetchStudents();
   }, []);
-      const fetchSearchStudent = async (search: string) => {
-        try {
-          const { response, json } = await getStudentsBySearch(search);
-          setLoading(true);
-          if (response.ok) {
-            setSearchedStudents(json);
-          } else {
-            setError(json.messageError);
-          }
-        } catch (error) {
-          console.error(error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      useEffect(() => {
-        if (!searchValue || searchValue.length < 0 || searchValue === null) {
-          setError('Pesquisa inváldia.');
-          return;
-        }
-        const delay = setTimeout(() => {
-          fetchSearchStudent(searchValue);
-        }, 600);
-
-        return () => clearTimeout(delay);
-      }, [searchValue]);
-   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      setSearchValue(e.target.value);
-    }
-    useEffect(() => {
-      if (modal) {
-       window.scrollTo(0,0)
-        document.body.style.overflow = 'hidden';
-        return () => {
-          document.body.style.overflow = 'auto';
-        };
+  const fetchSearchStudent = async (search: string) => {
+    try {
+      const { response, json } = await getStudentsBySearch(search);
+      setLoading(true);
+      if (response.ok) {
+        setSearchedStudents(json);
+      } else {
+        setError(json.messageError);
       }
-    });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (!searchValue || searchValue.length < 0 || searchValue === null) {
+      setError('Pesquisa inváldia.');
+      return;
+    }
+    const delay = setTimeout(() => {
+      fetchSearchStudent(searchValue);
+    }, 600);
+
+    return () => clearTimeout(delay);
+  }, [searchValue]);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setSearchValue(e.target.value);
+  }
+  useEffect(() => {
+    if (modal) {
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = 'auto';
+      };
+    }
+  });
   if (loading)
     return (
       <div className="flex justify-center content-center pt-10">
@@ -103,23 +103,21 @@ export default function Page() {
       </div>
     );
   if (students === null) return <ErrorInfo message="Não foi possível carregar os alunos. Tente novamente mais tarde." />;
-  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno."/>;
-  if (searchedStudents && searchedStudents.length === 0) return <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente."/ >;
-
+  if (students.length === 0) return <ErrorInfo message="Nenhum aluno encontrado. Tente criar um novo aluno." />;
+  if (searchedStudents && searchedStudents.length === 0) return <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente." />;
 
   return (
     <PageContainer>
       <ToastContainer />
       <TitlePage title="Deletar aluno" href="/student" />
       <div className="flex flex-col gap-4 p-4 min-h-screen h-full bg-white rounded-md">
-        <SearchInput placeholder="Buscar Aluno" type="text" handleChange={handleChange} />
-        {searchedStudents && (
-          <button className="text-gray-500 text-left py-4 px-2" onClick={cleanSearch}>
-            Limpar busca
-          </button>
-        )}
+        <form className="flex flex-col gap-4 items-start">
+          <SearchInput placeholder="Buscar Aluno" type="text" handleChange={handleChange} />
+          {searchedStudents && <ButtonCleanSearch cleanSearch={cleanSearch}>Limpar busca</ButtonCleanSearch>}
+        </form>
         <div className="flex flex-col gap-4">
           {modal && <DeleteModal />}
+
           {searchedStudents && (
             <span>
               <h3>
@@ -127,6 +125,8 @@ export default function Page() {
               </h3>
             </span>
           )}
+          {searchedStudents && searchedStudents.length === 0 && <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente." />}
+          {students && students.length === 0 && <ErrorInfo message="Nenhum aluno encontrado com esse nome. Tente novamente." />}
           {<List TypeCard={CardDelete} students={searchedStudents ? searchedStudents : students} />}
         </div>
       </div>

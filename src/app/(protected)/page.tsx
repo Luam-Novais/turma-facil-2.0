@@ -1,7 +1,7 @@
 'use client';
 import { Spinner } from '@/src/components/spinner';
 import { data_get } from '@/src/utils/fecthOpt';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {

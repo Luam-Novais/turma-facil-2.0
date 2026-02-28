@@ -17,7 +17,6 @@ export default function Login(){
   const [error, setError] = useState<string | null>(null);
   const router = useRouter()
   const onSubmit: SubmitHandler<AuthCredentialsDTO> = async (data)=>{
-    console.log(data)
     try {
       setLoading(true)
       const { response, json } = await loginService(data);

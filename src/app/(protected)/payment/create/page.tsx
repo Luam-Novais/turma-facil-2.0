@@ -52,7 +52,7 @@ export default function Page(){
               <input type="hidden" {...register('student_id', {required: true})} />
               <Input type="date" label="Insira a data do pagamento" register={register('payment_date', {required: true})} />
               <Input type="text" label="Insira a forma de pagamento" register={register('payment_method', {required: true})} />
-              <Select options={reasonsPayment} register={register('payment_reason', {required: true})} />
+              <Select label="Motivo do Pagamento" options={reasonsPayment} register={register('payment_reason', {required: true})} />
               <Button loadingState={loading}>Efetuar Lançamento</Button>
             </form>
           </FormProvider>

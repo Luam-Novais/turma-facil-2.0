@@ -2,7 +2,7 @@
 import { PageContainer } from '@/src/components/container';
 import { TitlePage } from '@/src/components/header';
 import { PaymentWithStudent } from '@/src/types/payment';
-import { getPaymentsService, getAllPaymentsService, getpaymentsByPeriodService, getCurrentMonthPaymentsService, createReportService} from '@/src/service/paymentService';
+import { getPaymentsService, getpaymentsByPeriodService, createReportService} from '@/src/service/paymentService';
 import { useEffect, useState } from 'react';
 import { ListFilter } from 'lucide-react';
 import {  CardPayment } from '@/src/components/card';
@@ -53,7 +53,6 @@ export default function Page() {
    if(payments){
      const {response} = await createReportService(payments);
      if(response.ok){
-
      }
    }
   }
