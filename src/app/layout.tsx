@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Turma Facil 2.0",
   description: "Sistema para gerenciamento de alunos.",
+  manifest: '/manifest.json'
 };
 
 export default function RootLayout({
